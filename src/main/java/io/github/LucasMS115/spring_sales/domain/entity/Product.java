@@ -49,4 +49,15 @@ public class Product {
     public void setUnityCost(BigDecimal unityCost) {
         this.unityCost = unityCost;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", unityCost=" + unityCost +
+                '}';
+    }
 }

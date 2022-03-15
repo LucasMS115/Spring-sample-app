@@ -40,4 +40,14 @@ public class OrderInfo {
     public void setOrderTotalCost(BigDecimal orderTotalCost) {
         this.orderTotalCost = orderTotalCost;
     }
+
+    @Override
+    public String toString() {
+        return "OrderInfo{" +
+                "id=" + id +
+                ", customer=" + customer +
+                ", orderDate=" + orderDate +
+                ", orderTotalCost=" + orderTotalCost +
+                '}';
+    }
 }
