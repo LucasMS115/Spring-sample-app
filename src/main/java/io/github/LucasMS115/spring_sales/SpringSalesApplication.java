@@ -31,9 +31,24 @@ public class SpringSalesApplication {
 	@Bean
 	public CommandLineRunner init(@Autowired Customers customers){
 		return args -> {
-			customers.create(new Customer("Lucas M Sales"));
+			customers.create(new Customer("Lucas MS"));
 			customers.create(new Customer("Bojji"));
+			customers.create(new Customer("King Bojji 1"));
+			customers.create(new Customer("Kage"));
+			customers.create(new Customer("Miranjo"));
 
+			Customer me = customers.getByName("Lucas");
+			me.setName("Lucas M. Sales");
+			customers.update(me);
+
+			System.out.println("\n### By name:");
+			List<Customer> customersByName = customers.listByName("Bojji");
+			customersByName.forEach(System.out::println);
+
+			customers.delete(customers.getByName("Miranjo"));
+			customers.delete(customers.getById(3));
+
+			System.out.println("\n### List all:");
 			List<Customer> allCustomers = customers.listAll();
 			allCustomers.forEach(System.out::println);
 		};
