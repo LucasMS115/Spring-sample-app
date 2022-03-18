@@ -45,8 +45,15 @@ public class SpringSalesApplication {
 			List<Customer> customersByName = customers.listByName("Bojji");
 			customersByName.forEach(System.out::println);
 
+			System.out.println("\n## search by name");
+			System.out.println(customers.getByName("Miranjo"));
+			System.out.println("## search by id");
+			System.out.println(customers.getById(3));
+
+			System.out.println("\n## delete by obj");
 			customers.delete(customers.getByName("Miranjo"));
-			customers.delete(customers.getById(3));
+			System.out.println("## delete by id");
+			customers.delete(3);
 
 			System.out.println("\n### List all:");
 			List<Customer> allCustomers = customers.listAll();

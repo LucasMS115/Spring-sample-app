@@ -5,11 +5,89 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+// **** JPA VERSION ****
+
+@Repository
+public class Customers {
+
+    @Autowired
+    private EntityManager entityManager;
+
+    @Transactional
+    public List<Customer> listAll(){
+        return entityManager
+                .createQuery(" FROM Customer ", Customer.class)
+                .getResultList();
+    }
+
+    @Transactional (readOnly = true) // optimize the query, dnt use cash, make it a bit faster
+    public Customer getById(Integer id){
+        String jpql_query_string = " SELECT c FROM Customer c WHERE c.id = :id "; //the name in the entity property, not the column name (if they're not the same)
+        TypedQuery<Customer> query = entityManager.createQuery(jpql_query_string, Customer.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
+    @Transactional (readOnly = true)
+    public List<Customer> listByName(String name){
+        String jpql_query_string = " SELECT c FROM Customer c WHERE c.name like :name ";
+        TypedQuery<Customer> query = entityManager.createQuery(jpql_query_string, Customer.class);
+        query.setParameter("name", "%" + name + "%");
+        return query.getResultList();
+    }
+
+    @Transactional
+    public Customer getByName(String name){
+        String jpql_query_string = " SELECT c FROM Customer c WHERE c.name like :name ";
+        TypedQuery<Customer> query = entityManager.createQuery(jpql_query_string, Customer.class);
+        query.setParameter("name", "%" + name + "%");
+        return query.getSingleResult();
+    }
+
+    @Transactional
+    public Customer create(Customer customer){
+        entityManager.persist(customer);
+        return customer;
+    }
+
+    @Transactional
+    public Customer update(Customer customer){
+        entityManager.merge(customer);
+        return customer;
+    }
+
+    @Transactional
+    public Boolean delete(Integer id){
+        Customer deletedCustomer = entityManager.find(Customer.class, id); //(class, identifier)
+        delete(deletedCustomer);
+        return true;
+    }
+
+    @Transactional
+    public Boolean delete(Customer customer){
+        //to do: check if this method returns the deleted object
+        if(!entityManager.contains(customer)){
+           customer = entityManager.merge(customer); //sync if not synced
+        }
+
+        entityManager.remove(customer);
+        return true;
+    }
+
+}
+
+
+// **** JDBC VERSION ****
+
+/*
 @Repository
 public class Customers {
 
@@ -89,3 +167,4 @@ public class Customers {
     }
 
 }
+*/
