@@ -28,38 +28,76 @@ public class SpringSalesApplication {
 		return testBean + " of the " + appName;
 	}
 
+//	**** JpaRepository VERSION ****
 	@Bean
-	public CommandLineRunner init(@Autowired Customers customers){
+	public CommandLineRunner init(@Autowired Customers customers) {
 		return args -> {
-			customers.create(new Customer("Lucas MS"));
-			customers.create(new Customer("Bojji"));
-			customers.create(new Customer("King Bojji 1"));
-			customers.create(new Customer("Kage"));
-			customers.create(new Customer("Miranjo"));
+			customers.save(new Customer("Lucas MS"));
+			customers.save(new Customer("Bojji"));
+			customers.save(new Customer("King Bojji 1"));
+			customers.save(new Customer("Kage"));
+			customers.save(new Customer("Miranjo"));
 
-			Customer me = customers.getByName("Lucas");
-			me.setName("Lucas M. Sales");
-			customers.update(me);
+//			Customer me = customers.getCustomerById(1);
+//			me.setName("Lucas M. Sales");
+//			customers.save(me);
 
-			System.out.println("\n### By name:");
-			List<Customer> customersByName = customers.listByName("Bojji");
+			System.out.println("\n### search by name:");
+			List<Customer> customersByName = customers.findByNameLike("Bojji");
 			customersByName.forEach(System.out::println);
 
-			System.out.println("\n## search by name");
+			System.out.println("\n## get by name");
 			System.out.println(customers.getByName("Miranjo"));
-			System.out.println("## search by id");
-			System.out.println(customers.getById(3));
+//			System.out.println("## get by id");
+//			System.out.println(customers.getById(3));
 
 			System.out.println("\n## delete by obj");
 			customers.delete(customers.getByName("Miranjo"));
 			System.out.println("## delete by id");
-			customers.delete(3);
+			customers.deleteById(3);
 
 			System.out.println("\n### List all:");
-			List<Customer> allCustomers = customers.listAll();
+			List<Customer> allCustomers = customers.findAll();
 			allCustomers.forEach(System.out::println);
 		};
 	}
+
+
+
+//		**** JPA VERSION ****
+//		@Bean
+//		public CommandLineRunner init(@Autowired Customers customers){
+//			return args -> {
+//				Customer teste = new Customer("Lucas MS");
+//				customers.create(teste);
+//				customers.create(new Customer("Bojji"));
+//				customers.create(new Customer("King Bojji 1"));
+//				customers.create(new Customer("Kage"));
+//				customers.create(new Customer("Miranjo"));
+//
+//				Customer me = customers.getByName("Lucas");
+//				me.setName("Lucas M. Sales");
+//				customers.update(me);
+//
+//				System.out.println("\n### By name:");
+//				List<Customer> customersByName = customers.listByName("Bojji");
+//				customersByName.forEach(System.out::println);
+//
+//				System.out.println("\n## search by name");
+//				System.out.println(customers.getByName("Miranjo"));
+//				System.out.println("## search by id");
+//				System.out.println(customers.getById(3));
+//
+//				System.out.println("\n## delete by obj");
+//				customers.delete(customers.getByName("Miranjo"));
+//				System.out.println("## delete by id");
+//				customers.delete(3);
+//
+//				System.out.println("\n### List all:");
+//				List<Customer> allCustomers = customers.listAll();
+//				allCustomers.forEach(System.out::println);
+//			};
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringSalesApplication.class, args);

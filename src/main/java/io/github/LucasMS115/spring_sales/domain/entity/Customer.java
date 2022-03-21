@@ -24,7 +24,7 @@ public class Customer {
 
     public Customer(){}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
