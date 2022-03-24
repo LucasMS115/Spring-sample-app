@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -38,18 +39,19 @@ public class SpringSalesApplication {
 			customers.save(new Customer("Kage"));
 			customers.save(new Customer("Miranjo"));
 
-//			Customer me = customers.getCustomerById(1);
-//			me.setName("Lucas M. Sales");
-//			customers.save(me);
+			System.out.println(customers.existsById(1));
+			Customer me = customers.findById(1).get();
+			me.setName("Lucas M. Sales");
+			customers.save(me);
 
 			System.out.println("\n### search by name:");
-			List<Customer> customersByName = customers.findByNameLike("Bojji");
+			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well
 			customersByName.forEach(System.out::println);
 
 			System.out.println("\n## get by name");
 			System.out.println(customers.getByName("Miranjo"));
-//			System.out.println("## get by id");
-//			System.out.println(customers.getById(3));
+			System.out.println("## get by id");
+			System.out.println(customers.findById(3).get());
 
 			System.out.println("\n## delete by obj");
 			customers.delete(customers.getByName("Miranjo"));
