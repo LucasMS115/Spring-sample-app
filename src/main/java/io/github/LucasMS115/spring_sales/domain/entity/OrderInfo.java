@@ -1,13 +1,31 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "order_info")
 public class OrderInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "order_id")
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
-    private Date orderDate;
+
+    @Column(name = "order_date")
+    private LocalDate orderDate;
+
+    @Column(name = "order_total_cost", length = 20, precision = 2)
     private BigDecimal orderTotalCost;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderProduct> relatedProducts;
 
     public Integer getId() {
         return id;
@@ -25,11 +43,11 @@ public class OrderInfo {
         this.customer = customer;
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -39,6 +57,14 @@ public class OrderInfo {
 
     public void setOrderTotalCost(BigDecimal orderTotalCost) {
         this.orderTotalCost = orderTotalCost;
+    }
+
+    public Set<OrderProduct> getRelatedProducts() {
+        return relatedProducts;
+    }
+
+    public void setRelatedProducts(Set<OrderProduct> relatedProducts) {
+        this.relatedProducts = relatedProducts;
     }
 
     @Override

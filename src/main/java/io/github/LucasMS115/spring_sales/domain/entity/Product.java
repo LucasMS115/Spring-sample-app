@@ -1,14 +1,32 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
+@Entity
+@Table(name = "product")
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id")
     private int id;
+
+    @Column(name = "brand")
     private String brand;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "unity_cost")
     private BigDecimal unityCost;
 
+    @OneToMany(mappedBy = "product")
+    private Set<OrderProduct> relatedOrders;
 
     public int getId() {
         return id;
@@ -48,6 +66,14 @@ public class Product {
 
     public void setUnityCost(BigDecimal unityCost) {
         this.unityCost = unityCost;
+    }
+
+    public Set<OrderProduct> getRelatedOrders() {
+        return relatedOrders;
+    }
+
+    public void setRelatedOrders(Set<OrderProduct> relatedOrders) {
+        this.relatedOrders = relatedOrders;
     }
 
     @Override
