@@ -38,6 +38,7 @@ public class SpringSalesApplication {
 			customers.save(new Customer("King Bojji 1"));
 			customers.save(new Customer("Kage"));
 			customers.save(new Customer("Miranjo"));
+			customers.save(new Customer("Ryu"));
 
 			System.out.println(customers.existsById(1));
 			Customer me = customers.findById(1).get();
@@ -48,6 +49,10 @@ public class SpringSalesApplication {
 			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well
 			customersByName.forEach(System.out::println);
 
+			System.out.println("\n### custom search by name:");
+			List<Customer> customCustomersByName = customers.customFindByNameLike("Bojji");
+			customCustomersByName.forEach(System.out::println);
+
 			System.out.println("\n## get by name");
 			System.out.println(customers.getByName("Miranjo"));
 			System.out.println("## get by id");
@@ -57,6 +62,8 @@ public class SpringSalesApplication {
 			customers.delete(customers.getByName("Miranjo"));
 			System.out.println("## delete by id");
 			customers.deleteById(3);
+			System.out.println("## delete by name");
+			customers.customDeleteByName("Ryu");
 
 			System.out.println("\n### List all:");
 			List<Customer> allCustomers = customers.findAll();

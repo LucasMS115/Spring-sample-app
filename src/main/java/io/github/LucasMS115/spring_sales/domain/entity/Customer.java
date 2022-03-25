@@ -2,7 +2,7 @@ package io.github.LucasMS115.spring_sales.domain.entity;
 
 import javax.persistence.*;
 
-@Entity //makes JPA believe every the class is representing a table and all its properties are columns (by default, with the same name)
+@Entity //makes JPA believe the class is representing a table and all its properties are columns (by default, with the same name)
 @Table (name = "customer")
 public class Customer {
     @Id

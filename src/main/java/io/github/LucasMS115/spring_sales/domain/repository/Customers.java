@@ -3,6 +3,9 @@ package io.github.LucasMS115.spring_sales.domain.repository;
 import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -15,8 +18,26 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface Customers extends JpaRepository<Customer, Integer> {
+
+    // query methods convention
     List<Customer> findByNameLike(String name);
+
+    // custom query strings
+
+    //hql
+//    @Query(value = "SELECT c FROM Customer c WHERE c.name like :name")
+//    List<Customer> customFindByNameLike(@Param("name") String name);
+
+    //sql
+    @Query(value = "SELECT * FROM Customer c WHERE c.name LIKE CONCAT('%',:name,'%')", nativeQuery = true)
+    List<Customer> customFindByNameLike(@Param("name") String name);
+
     Customer getByName(String name);
+
+    @Modifying
+    @Transactional // don't know if this is really necessary, but seems like it is
+    @Query("DELETE FROM Customer c WHERE c.name = :name ")
+    void customDeleteByName(@Param("name") String name);
 }
 
 // **** JPA VERSION ****
