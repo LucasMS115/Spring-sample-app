@@ -44,7 +44,7 @@ public interface Customers extends JpaRepository<Customer, Integer> {
         This is particularly useful in the case of a collection.”
         https://dzone.com/articles/how-to-decide-between-join-and-join-fetch
     */
-    @Query("SELECT c FROM Customer c LEFT JOIN FETCH OrderInfo WHERE c.id = :customer_id") // the name of the class att, not the column name (id|customer_id)
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.orders WHERE c.id = :customer_id") // the name of the class att, not the column name (id|customer_id)
     Customer findCustomerFetchOrderInfo(@Param("customer_id") Integer customer_id);
 }
 

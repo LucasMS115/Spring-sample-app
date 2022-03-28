@@ -57,6 +57,12 @@ public class SpringSalesApplication {
 			orderLucas.setOrderTotalCost(BigDecimal.valueOf(1000));
 			orderInfos.save(orderLucas);
 
+			OrderInfo orderLucas2 = new OrderInfo();
+			orderLucas2.setCustomer(me);
+			orderLucas2.setOrderDate(LocalDate.now());
+			orderLucas2.setOrderTotalCost(BigDecimal.valueOf(1000));
+			orderInfos.save(orderLucas2);
+
 			System.out.println("\n### search by name:");
 			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well
 			customersByName.forEach(System.out::println);
@@ -81,13 +87,12 @@ public class SpringSalesApplication {
 			List<Customer> allCustomers = customers.findAll();
 			allCustomers.forEach(System.out::println);
 
-//			System.out.println("\n### One to many (findCustomerFetchOrderInfo)");
-//			Customer lucas = customers.findCustomerFetchOrderInfo(1);
-//			System.out.println(lucas);
-//			lucas.getOrders().forEach(System.out::println);
+			System.out.println("\n### One to many (findCustomerFetchOrderInfo)");
+			Customer lucas = customers.findCustomerFetchOrderInfo(1);
+			lucas.getOrders().forEach(System.out::println);
 
-			System.out.println("- By query convention");
-//			orderInfos.findByCustomer(me).forEach(System.out::println);
+			System.out.println("\n- By query convention");
+			orderInfos.findByCustomer(me).forEach(System.out::println);
 		};
 	}
 
