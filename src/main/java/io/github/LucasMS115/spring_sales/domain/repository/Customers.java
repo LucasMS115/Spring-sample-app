@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+// **** JpaRepository VERSION ****
 public interface Customers extends JpaRepository<Customer, Integer> {
 
     // --- query methods convention ---
@@ -48,7 +49,7 @@ public interface Customers extends JpaRepository<Customer, Integer> {
     Customer findCustomerFetchOrderInfo(@Param("customer_id") Integer customer_id);
 }
 
-// **** JPA VERSION ****
+// **** JPA - Entity Manager VERSION ****
 //
 //@Repository
 //public class Customers {

@@ -1,5 +1,7 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ public class OrderInfo {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference
     private Customer customer;
 
     @Column(name = "order_date")

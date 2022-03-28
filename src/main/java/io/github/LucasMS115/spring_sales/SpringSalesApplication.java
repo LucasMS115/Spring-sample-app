@@ -50,7 +50,7 @@ public class SpringSalesApplication {
 			me.setName("Lucas M. Sales");
 			customers.save(me);
 
-			System.out.println("\n### create order");
+			System.out.println("\n### create orders");
 			OrderInfo orderLucas = new OrderInfo();
 			orderLucas.setCustomer(me);
 			orderLucas.setOrderDate(LocalDate.now());
@@ -92,7 +92,7 @@ public class SpringSalesApplication {
 			lucas.getOrders().forEach(System.out::println);
 
 			System.out.println("\n- By query convention");
-			orderInfos.findByCustomer(me).forEach(System.out::println);
+			orderInfos.findByCustomer(lucas).forEach(System.out::println);
 		};
 	}
 

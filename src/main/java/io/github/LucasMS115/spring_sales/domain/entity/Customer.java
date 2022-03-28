@@ -1,5 +1,7 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class Customer {
     private String name;
 
     @OneToMany(mappedBy = "customer") // mappedBy = <name of the property used to refer the customer at the other entity>
+    @JsonManagedReference
     private Set<OrderInfo> orders;
 
     public Customer(Integer id, String name){
