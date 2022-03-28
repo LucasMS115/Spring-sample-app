@@ -1,7 +1,9 @@
 package io.github.LucasMS115.spring_sales;
 
 import io.github.LucasMS115.spring_sales.domain.entity.Customer;
+import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
+import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +35,7 @@ public class SpringSalesApplication {
 
 //	**** JpaRepository VERSION ****
 	@Bean
-	public CommandLineRunner init(@Autowired Customers customers) {
+	public CommandLineRunner init(@Autowired Customers customers, @Autowired OrderInfos orderInfos) {
 		return args -> {
 			customers.save(new Customer("Lucas MS"));
 			customers.save(new Customer("Bojji"));
@@ -40,10 +44,18 @@ public class SpringSalesApplication {
 			customers.save(new Customer("Miranjo"));
 			customers.save(new Customer("Ryu"));
 
+			System.out.println("\n### update");
 			System.out.println(customers.existsById(1));
 			Customer me = customers.findById(1).get();
 			me.setName("Lucas M. Sales");
 			customers.save(me);
+
+			System.out.println("\n### create order");
+			OrderInfo orderLucas = new OrderInfo();
+			orderLucas.setCustomer(me);
+			orderLucas.setOrderDate(LocalDate.now());
+			orderLucas.setOrderTotalCost(BigDecimal.valueOf(1000));
+			orderInfos.save(orderLucas);
 
 			System.out.println("\n### search by name:");
 			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well
@@ -68,6 +80,14 @@ public class SpringSalesApplication {
 			System.out.println("\n### List all:");
 			List<Customer> allCustomers = customers.findAll();
 			allCustomers.forEach(System.out::println);
+
+//			System.out.println("\n### One to many (findCustomerFetchOrderInfo)");
+//			Customer lucas = customers.findCustomerFetchOrderInfo(1);
+//			System.out.println(lucas);
+//			lucas.getOrders().forEach(System.out::println);
+
+			System.out.println("- By query convention");
+//			orderInfos.findByCustomer(me).forEach(System.out::println);
 		};
 	}
 

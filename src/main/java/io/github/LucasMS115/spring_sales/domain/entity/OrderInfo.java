@@ -21,7 +21,7 @@ public class OrderInfo {
     @Column(name = "order_date")
     private LocalDate orderDate;
 
-    @Column(name = "order_total_cost", length = 20, precision = 2)
+    @Column(name = "order_total_cost", scale = 2, precision = 20)
     private BigDecimal orderTotalCost;
 
     @OneToMany(mappedBy = "order")

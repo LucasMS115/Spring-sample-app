@@ -19,25 +19,33 @@ import java.util.List;
 
 public interface Customers extends JpaRepository<Customer, Integer> {
 
-    // query methods convention
+    // --- query methods convention ---
     List<Customer> findByNameLike(String name);
+    Customer getByName(String name);
 
-    // custom query strings
+    // --- custom query strings ---
 
     //hql
-//    @Query(value = "SELECT c FROM Customer c WHERE c.name like :name")
-//    List<Customer> customFindByNameLike(@Param("name") String name);
+    //@Query(value = "SELECT c FROM Customer c WHERE c.name like :name")
+    //List<Customer> customFindByNameLike(@Param("name") String name);
 
     //sql
     @Query(value = "SELECT * FROM Customer c WHERE c.name LIKE CONCAT('%',:name,'%')", nativeQuery = true)
     List<Customer> customFindByNameLike(@Param("name") String name);
 
-    Customer getByName(String name);
-
     @Modifying
     @Transactional // don't know if this is really necessary, but seems like it is
     @Query("DELETE FROM Customer c WHERE c.name = :name ")
     void customDeleteByName(@Param("name") String name);
+
+    //With relationships
+    //It isn't necessary define the relationship inside the query
+    /* “A “fetch” join allows associations or collections of values to be initialized along with their parent objects using a single select.
+        This is particularly useful in the case of a collection.”
+        https://dzone.com/articles/how-to-decide-between-join-and-join-fetch
+    */
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH OrderInfo WHERE c.id = :customer_id") // the name of the class att, not the column name (id|customer_id)
+    Customer findCustomerFetchOrderInfo(@Param("customer_id") Integer customer_id);
 }
 
 // **** JPA VERSION ****
