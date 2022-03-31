@@ -1,5 +1,6 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -16,7 +17,9 @@ public class Customer {
     @Column (name = "name", length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "customer") // mappedBy = <name of the property used to refer the customer at the other entity>
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, orphanRemoval = true) // mappedBy = <name of the property used to refer the customer at the other entity>
+    @JsonIgnore
     @JsonManagedReference
     private Set<OrderInfo> orders;
 

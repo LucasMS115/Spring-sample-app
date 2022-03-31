@@ -78,8 +78,8 @@ public class SpringSalesApplication {
 
 			System.out.println("\n## delete by obj");
 			customers.delete(customers.getByName("Miranjo"));
-			System.out.println("## delete by id");
-			customers.deleteById(3);
+//			System.out.println("## delete by id");
+//			customers.deleteById(3);
 			System.out.println("## delete by name");
 			customers.customDeleteByName("Ryu");
 

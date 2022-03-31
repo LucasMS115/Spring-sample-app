@@ -34,6 +34,7 @@ public interface Customers extends JpaRepository<Customer, Integer> {
     @Query(value = "SELECT * FROM Customer c WHERE c.name LIKE CONCAT('%',:name,'%')", nativeQuery = true)
     List<Customer> customFindByNameLike(@Param("name") String name);
 
+    //this method is not necessary, can just get the customer by name and delete it using the built-in repository method
     @Modifying
     @Transactional // don't know if this is really necessary, but seems like it is
     @Query("DELETE FROM Customer c WHERE c.name = :name ")
