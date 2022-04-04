@@ -4,6 +4,8 @@ import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
 import jdk.nashorn.internal.ir.Optimistic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,18 @@ public class CustomerController {
         //ResponseEntity is an object that represents the response body
         List<Customer> foundCustomers = customers.customFindByNameLike(name);
 
+        return ResponseEntity.ok(foundCustomers);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity find(Customer filter){
+        ExampleMatcher matcher = ExampleMatcher
+                                    .matching()
+                                    .withIgnoreCase()
+                                    .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example example = Example.of(filter, matcher);
+        List<Customer> foundCustomers = customers.findAll(example);
         return ResponseEntity.ok(foundCustomers);
     }
 

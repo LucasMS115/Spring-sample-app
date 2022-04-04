@@ -17,7 +17,6 @@ public class Customer {
     @Column (name = "name", length = 100)
     private String name;
 
-
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE) // mappedBy = <name of the property used to refer the customer at the other entity>
     @JsonIgnore
     @JsonManagedReference
