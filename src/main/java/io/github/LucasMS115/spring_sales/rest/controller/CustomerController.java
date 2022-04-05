@@ -6,14 +6,94 @@ import jdk.nashorn.internal.ir.Optimistic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
+
+
+
+@RestController
+@RequestMapping("/api/customers")
+public class CustomerController {
+
+    private final Customers customers;
+
+    public CustomerController(Customers customers) {
+        this.customers = customers;
+    }
+
+    @GetMapping(value = {"/hello/{name}", "/hello"})
+    public String helloCustomer(@PathVariable(name = "name", required = false) String name){
+        if(name != null) return String.format("Hello %s", name);
+        return "Hello customer!";
+    }
+
+
+    @GetMapping("/{id}")
+    public Customer getCustomerById(@PathVariable("id") Integer id){
+        return customers
+                .findById(id)
+                .orElseThrow( () ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found")
+                );
+    }
+
+    @GetMapping("/list")
+    public List<Customer> getCustomers(){
+        return customers.findAll();
+    }
+
+    @GetMapping("/list/{name}")
+    public List<Customer> getCustomersByName(@PathVariable String name){
+        return  customers.customFindByNameLike(name);
+    }
+
+    @GetMapping("/find")
+    public List<Customer> find(Customer filter){
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example example = Example.of(filter, matcher);
+        return customers.findAll(example);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Customer save(@RequestBody Customer customer){
+        return customers.save(customer);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Integer id, @RequestBody Customer customer){
+        customers.findById(id)
+                .map( foundCustomer -> {
+                    customer.setId(foundCustomer.getId());
+                    customers.save(customer);
+                    return foundCustomer;
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Customer not found"));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id){
+        Optional customer = customers.findById(id);
+        if(customer.isPresent()) customers.delete((Customer) customer.get());
+        else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Customer not found");
+
+    }
+
+
+/*  ### Controller - ResponseEntity version ###
 @Controller
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -105,6 +185,8 @@ public class CustomerController {
         customers.delete(customer.get());
         return ResponseEntity.noContent().build();
     }
+
+*/
 
 //    @DeleteMapping("/{name}")
 //    @ResponseBody
