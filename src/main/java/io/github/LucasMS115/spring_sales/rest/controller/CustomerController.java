@@ -45,6 +45,15 @@ public class CustomerController {
                 );
     }
 
+    @GetMapping("/{id}/orders")
+    public Customer getCustomerWithOrdersById(@PathVariable("id") Integer id) {
+        try {
+            return customers.findCustomerFetchOrderInfo(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found \n" + e + "\n \"Customer not found");
+        }
+    }
+
     @GetMapping("/list")
     public List<Customer> getCustomers(){
         return customers.findAll();
