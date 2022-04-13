@@ -2,6 +2,7 @@ package io.github.LucasMS115.spring_sales.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +16,7 @@ public class Customer {
     private Integer id;
 
     @Column (name = "name", length = 100)
+    @NotNull
     private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE) // mappedBy = <name of the property used to refer the customer at the other entity>

@@ -1,11 +1,11 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -19,15 +19,19 @@ public class OrderInfo {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonBackReference
+    @NotNull
     private Customer customer;
 
     @Column(name = "order_date")
+    @NotNull
     private LocalDate orderDate;
 
     @Column(name = "order_total_cost", scale = 2, precision = 20)
+    @NotNull
     private BigDecimal orderTotalCost;
 
     @OneToMany(mappedBy = "order")
+    @NotNull
     private Set<OrderProduct> relatedProducts;
 
     public Integer getId() {

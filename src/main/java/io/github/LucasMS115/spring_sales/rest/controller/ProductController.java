@@ -2,7 +2,6 @@ package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.Product;
 import io.github.LucasMS115.spring_sales.domain.repository.Products;
-import org.h2.util.json.JSONArray;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -43,16 +42,6 @@ public class ProductController {
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found")
                 );
     }
-
-//    @GetMapping()
-//    public List<Customer> findCustomersByName(@RequestParam String name){
-//        return  products.findByNameLike(name);
-//    }
-//
-//    @GetMapping()
-//    public List<Customer> findCustomersByBrand(@RequestParam String brand){
-//        return  products.findByNameLike(brand);
-//    }
 
     @GetMapping("/find")
     public List<Product> find(Product filter){
@@ -95,7 +84,7 @@ public class ProductController {
                     product.setId(foundProduct.getId());
                     products.save(product);
                     return foundProduct;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Product not found"));
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Update failed - Product not found"));
     }
 
     @DeleteMapping("/{id}")

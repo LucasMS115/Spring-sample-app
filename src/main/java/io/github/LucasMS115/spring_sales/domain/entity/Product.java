@@ -1,5 +1,7 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -17,6 +19,7 @@ public class Product {
     private String brand;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 
     @Column(name = "description")
