@@ -2,12 +2,15 @@ package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.Product;
 import io.github.LucasMS115.spring_sales.domain.repository.Products;
+import org.h2.util.json.JSONArray;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,8 +67,14 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product save(@RequestBody Product product){
-        return products.save(product);
+    public List<Product> save(@RequestBody Product[] newProducts){
+        ArrayList<Product> createdProducts = new ArrayList<Product>();
+        System.out.println(newProducts);
+        Arrays.stream(newProducts).forEach(p -> {
+            products.save(p);
+            createdProducts.add(p);
+        });
+        return createdProducts;
     }
 
     /*
@@ -73,7 +82,7 @@ public class ProductController {
     {
         "brand": "Rubik's",
         "name": "3x3 Rubik's cube",
-        "discription": "The original Rubik's cube :)",
+        "description": "The original Rubik's cube :)",
         "unityCost": "50.00"
     }
      */

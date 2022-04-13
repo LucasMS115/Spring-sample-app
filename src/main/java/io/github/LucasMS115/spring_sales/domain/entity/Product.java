@@ -11,7 +11,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "brand")
     private String brand;
@@ -28,11 +28,11 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<OrderProduct> relatedOrders;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
