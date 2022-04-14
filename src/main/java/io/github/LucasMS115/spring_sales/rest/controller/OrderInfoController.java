@@ -1,7 +1,9 @@
 package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
+import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
+import io.github.LucasMS115.spring_sales.domain.repository.Customers;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class OrderInfoController {
 
     private final OrderInfos orders;
+    private final Customers customers;
 
-    public OrderInfoController(OrderInfos orders) {
+    public OrderInfoController(OrderInfos orders, Customers customers) {
         this.orders = orders;
+        this.customers = customers;
     }
 
     @GetMapping("/hello")
@@ -55,7 +59,14 @@ public class OrderInfoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInfo save(@RequestBody OrderInfo order){
-        return orders.save(order);
+        Optional customer = customers.findById(order.getCustomer().getId());
+        if(customer.isPresent()){
+            order.setCustomer((Customer) customer.get());
+            return orders.save(order);
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
+        }
+
     }
 
     @PutMapping("/{id}")

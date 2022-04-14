@@ -2,6 +2,8 @@ package io.github.LucasMS115.spring_sales.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,6 +19,7 @@ public class OrderInfo {
     private Integer id;
 
     @ManyToOne
+    @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "customer_id")
     @JsonBackReference
     @NotNull
@@ -31,7 +34,6 @@ public class OrderInfo {
     private BigDecimal orderTotalCost;
 
     @OneToMany(mappedBy = "order")
-    @NotNull
     private Set<OrderProduct> relatedProducts;
 
     public Integer getId() {

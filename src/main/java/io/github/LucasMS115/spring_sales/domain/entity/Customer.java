@@ -19,7 +19,7 @@ public class Customer {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE) // mappedBy = <name of the property used to refer the customer at the other entity>
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL) // mappedBy = <name of the property used to refer the customer at the other entity>
     @JsonIgnore
     @JsonManagedReference
     private Set<OrderInfo> orders;
