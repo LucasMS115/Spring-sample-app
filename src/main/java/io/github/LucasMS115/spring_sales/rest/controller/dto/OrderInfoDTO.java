@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderInfoDTO {
     private Integer customer;
-    private BigDecimal total_cost;
+    private BigDecimal totalCost;
     private List<OrderedProductDTO> items;
 }

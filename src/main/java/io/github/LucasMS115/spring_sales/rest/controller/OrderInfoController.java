@@ -3,6 +3,7 @@ package io.github.LucasMS115.spring_sales.rest.controller;
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
+import io.github.LucasMS115.spring_sales.rest.controller.dto.OrderInfoDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -60,10 +61,9 @@ public class OrderInfoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderInfo save(@RequestBody OrderInfoService orderAndProduct){
-
-
-        return null;
+    public Integer save(@RequestBody OrderInfoDTO dto){
+        OrderInfo order = orderInfoService.save(dto);
+        return order.getId();
     }
 
     @PutMapping("/{id}")

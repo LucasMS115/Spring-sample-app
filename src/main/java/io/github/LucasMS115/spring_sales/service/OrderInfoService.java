@@ -1,5 +1,8 @@
 package io.github.LucasMS115.spring_sales.service;
 
-public interface OrderInfoService {
+import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
+import io.github.LucasMS115.spring_sales.rest.controller.dto.OrderInfoDTO;
 
+public interface OrderInfoService {
+    OrderInfo save(OrderInfoDTO dto);
 }
