@@ -2,8 +2,10 @@ package io.github.LucasMS115.spring_sales;
 
 import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
+import io.github.LucasMS115.spring_sales.domain.entity.Product;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
+import io.github.LucasMS115.spring_sales.domain.repository.Products;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -35,7 +37,7 @@ public class SpringSalesApplication {
 
 //	**** JpaRepository VERSION ****
 	@Bean
-	public CommandLineRunner init(@Autowired Customers customers, @Autowired OrderInfos orderInfos) {
+	public CommandLineRunner init(@Autowired Customers customers, @Autowired OrderInfos orderInfos, @Autowired Products products) {
 		return args -> {
 			customers.save(new Customer("Lucas MS"));
 			customers.save(new Customer("Bojji"));
@@ -62,6 +64,21 @@ public class SpringSalesApplication {
 			orderLucas2.setOrderDate(LocalDate.now());
 			orderLucas2.setOrderTotalCost(BigDecimal.valueOf(1000));
 			orderInfos.save(orderLucas2);
+
+			System.out.println("\n### create products");
+			Product p1 = new Product();
+			p1.setName("Cafezin");
+			p1.setBrand("Melitta");
+			p1.setDescription("Sabor da fazenda");
+			p1.setUnityCost(new BigDecimal(16));
+			products.save(p1);
+
+			Product p2 = new Product();
+			p2.setName("Cube 3x3");
+			p2.setBrand("Rubiks");
+			p2.setDescription("The classic one");
+			p2.setUnityCost(new BigDecimal(50));
+			products.save(p2);
 
 			System.out.println("\n### search by name:");
 			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well

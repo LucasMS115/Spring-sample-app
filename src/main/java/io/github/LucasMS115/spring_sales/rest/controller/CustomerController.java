@@ -2,14 +2,9 @@ package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
-import jdk.nashorn.internal.ir.Optimistic;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -94,9 +89,12 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id){
+    public Class<Void> delete(@PathVariable Integer id){
         Optional customer = customers.findById(id);
-        if(customer.isPresent()) customers.delete((Customer) customer.get());
+        if(customer.isPresent()){
+            customers.delete((Customer) customer.get());
+            return Void.TYPE;
+        }
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Customer not found");
 
     }

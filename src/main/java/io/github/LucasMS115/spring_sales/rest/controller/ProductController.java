@@ -89,9 +89,12 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id){
+    public Class<Void> delete(@PathVariable Integer id){
         Optional product = products.findById(id);
-        if(product.isPresent()) products.delete((Product) product.get());
+        if(product.isPresent()){
+            products.delete((Product) product.get());
+            return Void.TYPE;
+        }
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Product not found");
     }
 

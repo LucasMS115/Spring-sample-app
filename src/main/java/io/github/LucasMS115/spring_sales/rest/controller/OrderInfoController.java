@@ -1,9 +1,9 @@
 package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
-import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
+import io.github.LucasMS115.spring_sales.service.OrderInfoService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -19,10 +19,12 @@ import java.util.Optional;
 public class OrderInfoController {
 
     private final OrderInfos orders;
+    private final OrderInfoService orderInfoService; //uses the interface so it can be filled with distinct implementations of the class (like a mocked one for example)
     private final Customers customers;
 
-    public OrderInfoController(OrderInfos orders, Customers customers) {
+    public OrderInfoController(OrderInfos orders, OrderInfoService orderInfoService, Customers customers) {
         this.orders = orders;
+        this.orderInfoService = orderInfoService;
         this.customers = customers;
     }
 
@@ -58,15 +60,10 @@ public class OrderInfoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderInfo save(@RequestBody OrderInfo order){
-        Optional customer = customers.findById(order.getCustomer().getId());
-        if(customer.isPresent()){
-            order.setCustomer((Customer) customer.get());
-            return orders.save(order);
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
-        }
+    public OrderInfo save(@RequestBody OrderInfoService orderAndProduct){
 
+
+        return null;
     }
 
     @PutMapping("/{id}")
@@ -82,9 +79,12 @@ public class OrderInfoController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id){
+    public Class<Void> delete(@PathVariable Integer id){
         Optional order = orders.findById(id);
-        if(order.isPresent()) orders.delete((OrderInfo) order.get());
+        if(order.isPresent()){
+            orders.delete((OrderInfo) order.get());
+            return Void.TYPE;
+        }
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Order not found");
     }
 

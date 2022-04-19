@@ -3,9 +3,21 @@ package io.github.LucasMS115.spring_sales.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
+
+//lombok stuff
+//@Getter //add getters and setters to class at compilation time
+//@Setter
+//@ToString //add the to string method
+//@EqualsAndHashCode
+@Data // do everything above
+@NoArgsConstructor //create constructors
+@AllArgsConstructor
 
 @Entity //makes JPA believe the class is representing a table and all its properties are columns (by default, with the same name)
 @Table (name = "customer")
@@ -33,38 +45,4 @@ public class Customer {
         this.name = name;
     }
 
-    public Customer(){}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<OrderInfo> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<OrderInfo> orders) {
-        this.orders = orders;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }
