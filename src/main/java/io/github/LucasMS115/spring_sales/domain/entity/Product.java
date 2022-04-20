@@ -1,15 +1,14 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -37,4 +36,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<OrderProduct> relatedOrders;
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", unityCost=" + unityCost +
+                '}';
+    }
 }

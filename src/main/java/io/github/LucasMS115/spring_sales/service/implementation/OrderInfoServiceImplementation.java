@@ -41,30 +41,31 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
         order.setOrderTotalCost(dto.getTotalCost());
         order.setCustomer(customer);
 
-        List<OrderProduct> orderProduct = convertItems(order, dto.getItems());
+        List<OrderProduct> orderProduct = createRelations(order, dto.getItems());
         orderInfos.save(order);
         orderProducts.saveAll(orderProduct);
 
         return order;
     }
 
-    private List<OrderProduct> convertItems(OrderInfo order, List<OrderedProductDTO> items){
+    private List<OrderProduct> createRelations(OrderInfo order, List<OrderedProductDTO> items){
         if(items.isEmpty()) {
             throw new BusinessRulesException("Can't create an order without products");
         }
 
-        return items
-                .stream()
-                .map( dto -> {
-                    Product product = products
-                            .findById(dto.getProduct())
-                            .orElseThrow(() -> new BusinessRulesException( "Invalid product id: " + dto.getProduct() ));
+        List<OrderProduct> relations = items.stream().map( dto -> {
 
-                    OrderProduct orderProduct = new OrderProduct();
-                    orderProduct.setQuantity(dto.getQuantity());
-                    orderProduct.setOrder(order);
-                    orderProduct.setProduct(product);
-                    return orderProduct;
-                }).collect(Collectors.toList());
+                Product product = products
+                        .findById(dto.getProduct())
+                        .orElseThrow(() -> new BusinessRulesException( "Invalid product id: " + dto.getProduct() ));
+
+                OrderProduct orderProduct = new OrderProduct();
+                orderProduct.setQuantity(dto.getQuantity());
+                orderProduct.setOrder(order);
+                orderProduct.setProduct(product);
+                return orderProduct;
+            }).collect(Collectors.toList());
+
+        return relations;
     }
 }

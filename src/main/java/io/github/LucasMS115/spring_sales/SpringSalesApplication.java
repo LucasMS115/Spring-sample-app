@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -102,6 +101,7 @@ public class SpringSalesApplication {
 
 			System.out.println("\n### List all:");
 			List<Customer> allCustomers = customers.findAll();
+			String a = orderInfos.findAll().get(0).toString();
 			allCustomers.forEach(System.out::println);
 
 			System.out.println("\n### One to many (findCustomerFetchOrderInfo)");
