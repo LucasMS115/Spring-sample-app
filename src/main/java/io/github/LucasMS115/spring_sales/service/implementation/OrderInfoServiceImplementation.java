@@ -9,8 +9,8 @@ import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderProducts;
 import io.github.LucasMS115.spring_sales.domain.repository.Products;
 import io.github.LucasMS115.spring_sales.exception.BusinessRulesException;
-import io.github.LucasMS115.spring_sales.rest.controller.dto.OrderInfoDTO;
-import io.github.LucasMS115.spring_sales.rest.controller.dto.OrderedProductDTO;
+import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoDTO;
+import io.github.LucasMS115.spring_sales.rest.dto.OrderedProductDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,6 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
     private final Customers customers;
     private final Products products;
     private final OrderProducts orderProducts;
-
 
     @Override
     @Transactional
