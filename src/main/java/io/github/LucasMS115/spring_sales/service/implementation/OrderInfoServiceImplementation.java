@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +29,11 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
     private final Customers customers;
     private final Products products;
     private final OrderProducts orderProducts;
+
+    @Override
+    public Optional<OrderInfo> getFullOrderInfo(Integer id) {
+        return orderInfos.findByIdFetchItens(id);
+    }
 
     @Override
     @Transactional

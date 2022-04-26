@@ -1,18 +1,28 @@
 package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
+import io.github.LucasMS115.spring_sales.domain.entity.OrderProduct;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoDTO;
+import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoResponseDTO;
+import io.github.LucasMS115.spring_sales.rest.dto.OrderProductResponseDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 
 @RestController
@@ -39,13 +49,20 @@ public class OrderInfoController {
         return orders.findAll();
     }
 
+//    @GetMapping("/{id}")
+//    public OrderInfo getById(@PathVariable("id") Integer id) {
+//        return orders
+//                .findById(id)
+//                .orElseThrow( () ->
+//                        new ResponseStatusException(NOT_FOUND, "Order not found")
+//                );
+//    }
+
     @GetMapping("/{id}")
-    public OrderInfo getById(@PathVariable("id") Integer id) {
-        return orders
-                .findById(id)
-                .orElseThrow( () ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found")
-                );
+    public OrderInfoResponseDTO getById(@PathVariable Integer id){
+        return orderInfoService.getFullOrderInfo(id)
+                .map( order -> convert(order))
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Order not found"));
     }
 
     @GetMapping("/find")
@@ -57,6 +74,33 @@ public class OrderInfoController {
 
         Example example = Example.of(filter, matcher);
         return orders.findAll(example);
+    }
+
+    private OrderInfoResponseDTO convert(OrderInfo order){
+        return OrderInfoResponseDTO
+                .builder()
+                .id(order.getId())
+                .customerName(order.getCustomer().getName())
+                .totalCost(order.getOrderTotalCost())
+                .orderDate(order.getOrderDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .products(convert(order.getRelatedProducts()))
+                .build();
+    }
+
+    private Set<OrderProductResponseDTO> convert(Set<OrderProduct> itens){
+        if(CollectionUtils.isEmpty(itens)) {
+            return Collections.emptySet();
+        }
+
+        return itens.stream().map(item -> OrderProductResponseDTO
+                .builder()
+                .brand(item.getProduct().getBrand())
+                .name(item.getProduct().getName())
+                .description(item.getProduct().getDescription())
+                .unityCost(item.getProduct().getUnityCost())
+                .quantity(item.getQuantity())
+                .build()
+        ).collect(Collectors.toSet());
     }
 
     @PostMapping
@@ -74,7 +118,7 @@ public class OrderInfoController {
                     order.setId(foundOrder.getId());
                     orders.save(order);
                     return foundOrder;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Update failed - Order not found"));
+                }).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Update failed - Order not found"));
     }
 
     @DeleteMapping("/{id}")
@@ -85,7 +129,7 @@ public class OrderInfoController {
             orders.delete((OrderInfo) order.get());
             return Void.TYPE;
         }
-        else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete failed - Order not found");
+        else throw new ResponseStatusException(NOT_FOUND, "Delete failed - Order not found");
     }
 
 }
