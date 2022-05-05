@@ -17,5 +17,6 @@ public class OrderInfoResponseDTO {
     private String customerName;
     private BigDecimal totalCost;
     private String orderDate;
+    private String status;
     private Set<OrderProductResponseDTO> products;
 }

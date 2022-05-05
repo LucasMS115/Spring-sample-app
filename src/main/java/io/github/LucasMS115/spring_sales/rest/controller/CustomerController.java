@@ -73,6 +73,7 @@ public class CustomerController {
         return customers.save(customer);
     }
 
+    //the put mapping will set null to every field that isn't specified on the request body
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable Integer id, @RequestBody Customer customer){

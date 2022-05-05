@@ -13,5 +13,6 @@ import java.util.List;
 public class OrderInfoDTO {
     private Integer customer;
     private BigDecimal totalCost;
+    private String status;
     private List<OrderedProductDTO> items;
 }

@@ -2,11 +2,13 @@ package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
 import io.github.LucasMS115.spring_sales.domain.entity.OrderProduct;
+import io.github.LucasMS115.spring_sales.domain.enums.OrderStatus;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoResponseDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderProductResponseDTO;
+import io.github.LucasMS115.spring_sales.rest.dto.UpdateOrderStatusDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -83,6 +85,7 @@ public class OrderInfoController {
                 .customerName(order.getCustomer().getName())
                 .totalCost(order.getOrderTotalCost())
                 .orderDate(order.getOrderDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .status(order.getStatus().name())
                 .products(convert(order.getRelatedProducts()))
                 .build();
     }
@@ -119,6 +122,12 @@ public class OrderInfoController {
                     orders.save(order);
                     return foundOrder;
                 }).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Update failed - Order not found"));
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateStatus(@PathVariable Integer id, @RequestBody UpdateOrderStatusDTO updateStatusDTO){
+        orderInfoService.updateStatus(id, OrderStatus.valueOf(updateStatusDTO.getNewStatus()));
     }
 
     @DeleteMapping("/{id}")

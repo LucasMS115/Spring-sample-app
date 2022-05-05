@@ -4,11 +4,13 @@ import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.entity.OrderInfo;
 import io.github.LucasMS115.spring_sales.domain.entity.OrderProduct;
 import io.github.LucasMS115.spring_sales.domain.entity.Product;
+import io.github.LucasMS115.spring_sales.domain.enums.OrderStatus;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderInfos;
 import io.github.LucasMS115.spring_sales.domain.repository.OrderProducts;
 import io.github.LucasMS115.spring_sales.domain.repository.Products;
 import io.github.LucasMS115.spring_sales.exception.BusinessRulesException;
+import io.github.LucasMS115.spring_sales.exception.OrderNotFoundException;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderedProductDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
@@ -20,6 +22,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import io.github.LucasMS115.spring_sales.domain.enums.OrderStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor //create a constructor with all the "final" properties
@@ -37,6 +44,17 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
 
     @Override
     @Transactional
+    public void updateStatus(Integer id, OrderStatus newStatus) {
+        orderInfos.findById(id)
+                .map( foundOrder -> {
+                    foundOrder.setStatus(newStatus);
+                    orderInfos.save(foundOrder);
+                    return foundOrder;
+                }).orElseThrow(() -> new OrderNotFoundException());
+    }
+
+    @Override
+    @Transactional
     public OrderInfo save(OrderInfoDTO dto) {
 
         Customer customer = customers.findById(dto.getCustomer()).orElseThrow( () -> new BusinessRulesException("Invalid customer"));
@@ -45,6 +63,7 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
         order.setOrderDate(LocalDate.now());
         order.setOrderTotalCost(dto.getTotalCost());
         order.setCustomer(customer);
+        order.setStatus(OrderStatus.CONFIRMED);
 
         List<OrderProduct> orderProduct = createRelations(order, dto.getItems());
         orderInfos.save(order);
