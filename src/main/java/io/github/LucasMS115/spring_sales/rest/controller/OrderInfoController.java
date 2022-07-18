@@ -10,6 +10,7 @@ import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoResponseDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderProductResponseDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.UpdateOrderStatusDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -63,7 +64,7 @@ public class OrderInfoController {
     @GetMapping("/{id}")
     public OrderInfoResponseDTO getById(@PathVariable Integer id){
         return orderInfoService.getFullOrderInfo(id)
-                .map( order -> convert(order))
+                .map(this::convert)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Order not found"));
     }
 
@@ -74,7 +75,7 @@ public class OrderInfoController {
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        Example example = Example.of(filter, matcher);
+        Example<OrderInfo> example = Example.of(filter, matcher);
         return orders.findAll(example);
     }
 
@@ -90,12 +91,12 @@ public class OrderInfoController {
                 .build();
     }
 
-    private Set<OrderProductResponseDTO> convert(Set<OrderProduct> itens){
-        if(CollectionUtils.isEmpty(itens)) {
+    private Set<OrderProductResponseDTO> convert(Set<OrderProduct> items){
+        if(CollectionUtils.isEmpty(items)) {
             return Collections.emptySet();
         }
 
-        return itens.stream().map(item -> OrderProductResponseDTO
+        return items.stream().map(item -> OrderProductResponseDTO
                 .builder()
                 .brand(item.getProduct().getBrand())
                 .name(item.getProduct().getName())
@@ -126,16 +127,16 @@ public class OrderInfoController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateStatus(@PathVariable Integer id, @RequestBody UpdateOrderStatusDTO updateStatusDTO){
+    public void updateStatus(@PathVariable Integer id, @RequestBody @NotNull UpdateOrderStatusDTO updateStatusDTO){
         orderInfoService.updateStatus(id, OrderStatus.valueOf(updateStatusDTO.getNewStatus()));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Class<Void> delete(@PathVariable Integer id){
-        Optional order = orders.findById(id);
+        Optional<OrderInfo> order = orders.findById(id);
         if(order.isPresent()){
-            orders.delete((OrderInfo) order.get());
+            orders.delete(order.get());
             return Void.TYPE;
         }
         else throw new ResponseStatusException(NOT_FOUND, "Delete failed - Order not found");

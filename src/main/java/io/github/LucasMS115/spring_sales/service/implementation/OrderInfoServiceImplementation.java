@@ -23,11 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import io.github.LucasMS115.spring_sales.domain.enums.OrderStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
 @Service
 @RequiredArgsConstructor //create a constructor with all the "final" properties
 public class OrderInfoServiceImplementation implements OrderInfoService {
@@ -39,7 +34,7 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
 
     @Override
     public Optional<OrderInfo> getFullOrderInfo(Integer id) {
-        return orderInfos.findByIdFetchItens(id);
+        return orderInfos.findByIdFetchItems(id);
     }
 
     @Override
@@ -50,7 +45,7 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
                     foundOrder.setStatus(newStatus);
                     orderInfos.save(foundOrder);
                     return foundOrder;
-                }).orElseThrow(() -> new OrderNotFoundException());
+                }).orElseThrow(OrderNotFoundException::new);
     }
 
     @Override
@@ -77,11 +72,11 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
             throw new BusinessRulesException("Can't create an order without products");
         }
 
-        List<OrderProduct> relations = items.stream().map( dto -> {
+        return items.stream().map(dto -> {
 
                 Product product = products
                         .findById(dto.getProduct())
-                        .orElseThrow(() -> new BusinessRulesException( "Invalid product id: " + dto.getProduct() ));
+                        .orElseThrow(() -> new BusinessRulesException( "Invalid product id: " + dto.getProduct()));
 
                 OrderProduct orderProduct = new OrderProduct();
                 orderProduct.setQuantity(dto.getQuantity());
@@ -89,7 +84,5 @@ public class OrderInfoServiceImplementation implements OrderInfoService {
                 orderProduct.setProduct(product);
                 return orderProduct;
             }).collect(Collectors.toList());
-
-        return relations;
     }
 }

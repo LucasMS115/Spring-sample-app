@@ -13,6 +13,6 @@ public interface OrderInfos extends JpaRepository<OrderInfo, Integer> {
     //Query methods
     Set<OrderInfo> findByCustomer(Customer customer);
 
-    @Query(" select o from OrderInfo o left join fetch o.relatedProducts where o.id = :id ")
-    Optional<OrderInfo> findByIdFetchItens(@Param("id") Integer id);
+    @Query(" SELECT o FROM OrderInfo o LEFT JOIN FETCH o.relatedProducts WHERE o.id = :id ")
+    Optional<OrderInfo> findByIdFetchItems(@Param("id") Integer id);
 }

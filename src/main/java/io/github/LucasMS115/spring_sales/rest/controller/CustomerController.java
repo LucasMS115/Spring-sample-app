@@ -63,7 +63,7 @@ public class CustomerController {
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        Example example = Example.of(filter, matcher);
+        Example<Customer> example = Example.of(filter, matcher);
         return customers.findAll(example);
     }
 
@@ -88,7 +88,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Class<Void> delete(@PathVariable Integer id){
-        Optional customer = customers.findById(id);
+        Optional<Customer> customer = customers.findById(id);
         if(customer.isPresent()){
             customers.delete((Customer) customer.get());
             return Void.TYPE;

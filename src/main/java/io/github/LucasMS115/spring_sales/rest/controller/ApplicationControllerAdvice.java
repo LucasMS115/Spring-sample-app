@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
-
     @ExceptionHandler(BusinessRulesException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleBusinessRulesException(BusinessRulesException e) {
