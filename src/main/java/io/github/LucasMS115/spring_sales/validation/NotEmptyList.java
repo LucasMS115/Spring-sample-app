@@ -1,6 +1,6 @@
-package io.github.LucasMS115.spring_sales.Validation;
+package io.github.LucasMS115.spring_sales.validation;
 
-import io.github.LucasMS115.spring_sales.Validation.constraintValidation.NotEmptyListValidator;
+import io.github.LucasMS115.spring_sales.validation.constraintValidation.NotEmptyListValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

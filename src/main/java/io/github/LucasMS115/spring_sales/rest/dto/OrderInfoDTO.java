@@ -1,11 +1,10 @@
 package io.github.LucasMS115.spring_sales.rest.dto;
 
-import io.github.LucasMS115.spring_sales.Validation.NotEmptyList;
+import io.github.LucasMS115.spring_sales.validation.NotEmptyList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
