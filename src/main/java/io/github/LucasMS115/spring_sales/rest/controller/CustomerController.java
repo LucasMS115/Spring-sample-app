@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,14 +70,14 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer save(@RequestBody Customer customer){
+    public Customer save(@RequestBody @Valid Customer customer){
         return customers.save(customer);
     }
 
     //the put mapping will set null to every field that isn't specified on the request body
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Integer id, @RequestBody Customer customer){
+    public void update(@PathVariable Integer id, @RequestBody @Valid Customer customer){
         customers.findById(id)
                 .map( foundCustomer -> {
                     customer.setId(foundCustomer.getId());

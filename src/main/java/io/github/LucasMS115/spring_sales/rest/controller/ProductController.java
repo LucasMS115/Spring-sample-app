@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,18 +51,21 @@ public class ProductController {
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        Example example = Example.of(filter, matcher);
+        Example<Product> example = Example.of(filter, matcher);
         return products.findAll(example);
     }
 
+    //to do: add validation to this request body list
+    //https://stackoverflow.com/questions/28150405/validation-of-a-list-of-objects-in-spring
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public List<Product> save(@RequestBody Product[] newProducts){
+    public List<Product> save(@RequestBody List<Product> newProducts){
         ArrayList<Product> createdProducts = new ArrayList<Product>();
         System.out.println(newProducts);
-        Arrays.stream(newProducts).forEach(p -> {
-            products.save(p);
-            createdProducts.add(p);
+
+        newProducts.stream().forEach(product -> {
+            products.save(product);
+            createdProducts.add(product);
         });
         return createdProducts;
     }
@@ -78,7 +82,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Integer id, @RequestBody Product product){
+    public void update(@PathVariable Integer id, @RequestBody @Valid Product product){
         products.findById(id)
                 .map( foundProduct -> {
                     product.setId(foundProduct.getId());

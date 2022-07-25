@@ -1,9 +1,10 @@
 package io.github.LucasMS115.spring_sales.domain.entity;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -21,16 +22,19 @@ public class Product {
     private Integer id;
 
     @Column(name = "brand")
+    @NotEmpty(message = "Product brand not specified")
     private String brand;
 
     @Column(name = "name")
-    @NotNull
+    @NotEmpty(message = "Product name not specified")
     private String name;
 
     @Column(name = "description")
+    @NotEmpty(message = "Description cannot be empty")
     private String description;
 
     @Column(name = "unity_cost")
+    @NotNull(message = "Unity cost not specified")
     private BigDecimal unityCost;
 
     @OneToMany(mappedBy = "product")

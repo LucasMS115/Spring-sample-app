@@ -2,10 +2,10 @@ package io.github.LucasMS115.spring_sales.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 //lombok stuff
@@ -25,7 +25,7 @@ public class Customer {
     private Integer id;
 
     @Column (name = "name", length = 100)
-    @NotNull
+    @NotEmpty(message = "Name cannot be empty")
     private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // mappedBy = <name of the property used to refer the customer at the other entity>

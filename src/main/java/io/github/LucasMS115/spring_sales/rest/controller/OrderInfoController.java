@@ -10,7 +10,6 @@ import io.github.LucasMS115.spring_sales.rest.dto.OrderInfoResponseDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.OrderProductResponseDTO;
 import io.github.LucasMS115.spring_sales.rest.dto.UpdateOrderStatusDTO;
 import io.github.LucasMS115.spring_sales.service.OrderInfoService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -109,14 +109,14 @@ public class OrderInfoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer save(@RequestBody OrderInfoDTO dto){
+    public Integer save(@RequestBody @Valid  OrderInfoDTO dto){
         OrderInfo order = orderInfoService.save(dto);
         return order.getId();
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Integer id, @RequestBody OrderInfo order){
+    public void update(@PathVariable Integer id, @Valid @RequestBody OrderInfo order){
         orders.findById(id)
                 .map( foundOrder -> {
                     order.setId(foundOrder.getId());
@@ -127,7 +127,7 @@ public class OrderInfoController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateStatus(@PathVariable Integer id, @RequestBody @NotNull UpdateOrderStatusDTO updateStatusDTO){
+    public void updateStatus(@PathVariable Integer id, @RequestBody @Valid UpdateOrderStatusDTO updateStatusDTO){
         orderInfoService.updateStatus(id, OrderStatus.valueOf(updateStatusDTO.getNewStatus()));
     }
 
