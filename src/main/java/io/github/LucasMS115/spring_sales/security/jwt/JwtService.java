@@ -1,4 +1,4 @@
-package io.github.LucasMS115.spring_sales;
+package io.github.LucasMS115.spring_sales.security.jwt;
 
 import io.github.LucasMS115.spring_sales.domain.entity.AppUser;
 import io.jsonwebtoken.Claims;
@@ -6,8 +6,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -56,25 +54,25 @@ public class JwtService {
             Claims claims = getClaims(token);
             Date expirationDate = claims.getExpiration();
             LocalDateTime convertedExpirationDate = expirationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            return LocalDateTime.now().isAfter(convertedExpirationDate);
+            return convertedExpirationDate.isAfter(LocalDateTime.now());
         } catch (Exception e) {
             return false;
         }
     }
 
     public String getUsername(String token) throws ExpiredJwtException {
-        return (String) getClaims(token).getSubject();
+        return getClaims(token).getSubject();
     }
 
     //testing the token generation
-    public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(SpringSalesApplication.class);
-        JwtService service = context.getBean(JwtService.class);
-        AppUser user = AppUser.builder().username("Lucas").build();
-        String token = service.generateToken(user);
-        System.out.println(token);
-        System.out.println(service.getClaims(token));
-        System.out.println(service.isTokenValid(token));
-        System.out.println(service.getUsername(token));
-    }
+//    public static void main(String[] args) {
+//        ConfigurableApplicationContext context = SpringApplication.run(SpringSalesApplication.class);
+//        JwtService service = context.getBean(JwtService.class);
+//        AppUser user = AppUser.builder().username("Lucas").build();
+//        String token = service.generateToken(user);
+//        System.out.println(token);
+//        System.out.println(service.getClaims(token));
+//        System.out.println(service.isTokenValid(token));
+//        System.out.println(service.getUsername(token));
+//    }
 }

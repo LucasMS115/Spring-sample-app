@@ -30,7 +30,7 @@ public class AppUser {
     private String password;
 
     @Column
-    private boolean isAdmin;
+    private boolean admin;
 
     @Override
     public boolean equals(Object o) {
