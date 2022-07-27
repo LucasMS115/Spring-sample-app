@@ -63,7 +63,7 @@ public class ProductController {
         ArrayList<Product> createdProducts = new ArrayList<Product>();
         System.out.println(newProducts);
 
-        newProducts.stream().forEach(product -> {
+        newProducts.forEach(product -> {
             products.save(product);
             createdProducts.add(product);
         });

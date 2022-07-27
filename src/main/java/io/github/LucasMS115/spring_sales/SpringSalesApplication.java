@@ -23,93 +23,93 @@ import java.util.List;
 @RestController
 public class SpringSalesApplication {
 
-	@Autowired
-	private String testBean;
-
-	@Value("${spring.application.name}")
-	private String appName;
-
-	@GetMapping("/hello")
-	public String helloWorld(){
-		return testBean + " of the " + appName;
-	}
+//	@Autowired
+//	private String testBean;
+//
+//	@Value("${spring.application.name}")
+//	private String appName;
+//
+//	@GetMapping("/hello")
+//	public String helloWorld(){
+//		return testBean + " of the " + appName;
+//	}
 
 //	**** JpaRepository VERSION ****
 	@Bean
 	public CommandLineRunner init(@Autowired Customers customers, @Autowired OrderInfos orderInfos, @Autowired Products products) {
 		return args -> {
-			customers.save(new Customer("Lucas MS"));
-			customers.save(new Customer("Bojji"));
-			customers.save(new Customer("King Bojji 1"));
-			customers.save(new Customer("Kage"));
-			customers.save(new Customer("Miranjo"));
-			customers.save(new Customer("Ryu"));
+//			customers.save(new Customer("Lucas MS"));
+//			customers.save(new Customer("Bojji"));
+//			customers.save(new Customer("King Bojji 1"));
+//			customers.save(new Customer("Kage"));
+//			customers.save(new Customer("Miranjo"));
+//			customers.save(new Customer("Ryu"));
+//
+//			System.out.println("\n### update");
+//			System.out.println(customers.existsById(1));
+//			Customer me = customers.findById(1).get();
+//			me.setName("Lucas M. Sales");
+//			customers.save(me);
+//
+//			System.out.println("\n### create orders");
+//			OrderInfo orderLucas = new OrderInfo();
+//			orderLucas.setCustomer(me);
+//			orderLucas.setOrderDate(LocalDate.now());
+//			orderLucas.setOrderTotalCost(BigDecimal.valueOf(1000));
+//			orderInfos.save(orderLucas);
+//
+//			OrderInfo orderLucas2 = new OrderInfo();
+//			orderLucas2.setCustomer(me);
+//			orderLucas2.setOrderDate(LocalDate.now());
+//			orderLucas2.setOrderTotalCost(BigDecimal.valueOf(1000));
+//			orderInfos.save(orderLucas2);
 
-			System.out.println("\n### update");
-			System.out.println(customers.existsById(1));
-			Customer me = customers.findById(1).get();
-			me.setName("Lucas M. Sales");
-			customers.save(me);
+//			System.out.println("\n### create products");
+//			Product p1 = new Product();
+//			p1.setName("Cafezin");
+//			p1.setBrand("Melitta");
+//			p1.setDescription("Sabor da fazenda");
+//			p1.setUnityCost(new BigDecimal(16));
+//			products.save(p1);
+//
+//			Product p2 = new Product();
+//			p2.setName("Cube 3x3");
+//			p2.setBrand("Rubiks");
+//			p2.setDescription("The classic one");
+//			p2.setUnityCost(new BigDecimal(50));
+//			products.save(p2);
+//
+//			System.out.println("\n### search by name:");
+//			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well
+//			customersByName.forEach(System.out::println);
 
-			System.out.println("\n### create orders");
-			OrderInfo orderLucas = new OrderInfo();
-			orderLucas.setCustomer(me);
-			orderLucas.setOrderDate(LocalDate.now());
-			orderLucas.setOrderTotalCost(BigDecimal.valueOf(1000));
-			orderInfos.save(orderLucas);
-
-			OrderInfo orderLucas2 = new OrderInfo();
-			orderLucas2.setCustomer(me);
-			orderLucas2.setOrderDate(LocalDate.now());
-			orderLucas2.setOrderTotalCost(BigDecimal.valueOf(1000));
-			orderInfos.save(orderLucas2);
-
-			System.out.println("\n### create products");
-			Product p1 = new Product();
-			p1.setName("Cafezin");
-			p1.setBrand("Melitta");
-			p1.setDescription("Sabor da fazenda");
-			p1.setUnityCost(new BigDecimal(16));
-			products.save(p1);
-
-			Product p2 = new Product();
-			p2.setName("Cube 3x3");
-			p2.setBrand("Rubiks");
-			p2.setDescription("The classic one");
-			p2.setUnityCost(new BigDecimal(50));
-			products.save(p2);
-
-			System.out.println("\n### search by name:");
-			List<Customer> customersByName = customers.findByNameLike("Bojji"); // the "like" didn't well
-			customersByName.forEach(System.out::println);
-
-			System.out.println("\n### custom search by name:");
-			List<Customer> customCustomersByName = customers.customFindByNameLike("Bojji");
-			customCustomersByName.forEach(System.out::println);
-
-			System.out.println("\n## get by name");
-			System.out.println(customers.getByName("Miranjo"));
-			System.out.println("## get by id");
-			System.out.println(customers.findById(3).get());
-
-			System.out.println("\n## delete by obj");
-			customers.delete(customers.getByName("Miranjo"));
-//			System.out.println("## delete by id");
-//			customers.deleteById(3);
-			System.out.println("## delete by name");
-			customers.customDeleteByName("Ryu");
-
-			System.out.println("\n### List all:");
-			List<Customer> allCustomers = customers.findAll();
-			String a = orderInfos.findAll().get(0).toString();
-			allCustomers.forEach(System.out::println);
-
-			System.out.println("\n### One to many (findCustomerFetchOrderInfo)");
-			Customer lucas = customers.findCustomerFetchOrderInfo(1);
-			lucas.getOrders().forEach(System.out::println);
-
-			System.out.println("\n- By query convention");
-			orderInfos.findByCustomer(lucas).forEach(System.out::println);
+//			System.out.println("\n### custom search by name:");
+//			List<Customer> customCustomersByName = customers.customFindByNameLike("Bojji");
+//			customCustomersByName.forEach(System.out::println);
+//
+//			System.out.println("\n## get by name");
+//			System.out.println(customers.getByName("Miranjo"));
+//			System.out.println("## get by id");
+//			System.out.println(customers.findById(3).get());
+//
+//			System.out.println("\n## delete by obj");
+//			customers.delete(customers.getByName("Miranjo"));
+////			System.out.println("## delete by id");
+////			customers.deleteById(3);
+//			System.out.println("## delete by name");
+//			customers.customDeleteByName("Ryu");
+//
+//			System.out.println("\n### List all:");
+//			List<Customer> allCustomers = customers.findAll();
+//			String a = orderInfos.findAll().get(0).toString();
+//			allCustomers.forEach(System.out::println);
+//
+//			System.out.println("\n### One to many (findCustomerFetchOrderInfo)");
+//			Customer lucas = customers.findCustomerFetchOrderInfo(1);
+//			lucas.getOrders().forEach(System.out::println);
+//
+//			System.out.println("\n- By query convention");
+//			orderInfos.findByCustomer(lucas).forEach(System.out::println);
 		};
 	}
 

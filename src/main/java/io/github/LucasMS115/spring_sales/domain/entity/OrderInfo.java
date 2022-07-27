@@ -20,7 +20,7 @@ import java.util.Set;
 @Table(name = "order_info")
 public class OrderInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Integer id;
 
