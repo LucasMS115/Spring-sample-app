@@ -2,6 +2,7 @@ package io.github.LucasMS115.spring_sales.rest.controller;
 
 import io.github.LucasMS115.spring_sales.domain.entity.Customer;
 import io.github.LucasMS115.spring_sales.domain.repository.Customers;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
+@Api
 public class CustomerController {
 
     private final Customers customers;
@@ -23,6 +25,7 @@ public class CustomerController {
     }
 
     @GetMapping(value = {"/hello/{name}", "/hello"})
+    @ApiOperation("Just testing if the api is up :)")
     public String helloCustomer(@PathVariable(name = "name", required = false) String name){
         if(name != null) return String.format("Hello %s", name);
         return "Hello customer!";
@@ -30,7 +33,12 @@ public class CustomerController {
 
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable("id") Integer id){
+    @ApiOperation("Search for a customer with a given id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Found It!"),
+            @ApiResponse(code = 404, message = "Customer not found")
+    })
+    public Customer getCustomerById(@PathVariable("id") @ApiParam("Customer ID") Integer id){
         return customers
                 .findById(id)
                 .orElseThrow( () ->
@@ -70,6 +78,11 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Save new customer")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Customer created!"),
+            @ApiResponse(code = 404, message = "Validation error :(")
+    })
     public Customer save(@RequestBody @Valid Customer customer){
         return customers.save(customer);
     }

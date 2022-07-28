@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -78,7 +79,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/orders/*").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/users").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/auth").permitAll()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
 
         .and() //every method call returns something, use and() to return to the start (http in this case)
 
@@ -91,4 +92,20 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
+    }
+
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers( "/swagger-ui.html");
+//    }
 }
